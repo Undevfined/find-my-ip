@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ip-finder:
+    build:
+      context: .
+    networks:
+      - ip-finder-net
+
+  https-portal:
+    image: steveltn/https-portal:1.23.1
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAINS: "ip-finder.undevfined.com -> http://ip-finder:80"
+      STAGE: production
+    volumes:
+      - https_portal_data:/var/lib/https-portal
+    networks:
+      - ip-finder-net
+
+networks:
+  ip-finder-net:
+
+volumes:
+  https_portal_data: {}

@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+
+# Binary created by `go build` (into ./bin)
+bin/
