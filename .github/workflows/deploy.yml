@@ -1,0 +1,31 @@
+name: Deploy IP Finder
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: pi-runner
+    name: Deploy IP Finder
+    steps:
+    - name: Create or clean pre-deploy directory
+      run: |
+        mkdir -p /pre-deploy
+        rm -rf /pre-deploy/*
+        
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        path: /pre-deploy
+        
+    - name: Build project
+      run: |
+        cd /pre-deploy
+        go build -o /usr/local/bin/ip-finder
+        
+    - name: Execute ip-finder in background
+      run: |
+        nohup /usr/local/bin/ip-finder &
