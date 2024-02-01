@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: pi-runner
+    runs-on: raspberrypi-runner
     name: Deploy IP Finder
     steps:
     - name: Create or clean pre-deploy directory
