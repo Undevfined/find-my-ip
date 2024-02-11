@@ -13,8 +13,8 @@ jobs:
     steps:
     - name: Create or clean pre-deploy directory
       run: |
-        mkdir -p /pre-deploy
-        rm -rf /pre-deploy/*
+        mkdir -p /tmp/pre-deploy
+        rm -rf /tmp/pre-deploy/*
         
     - name: Checkout repository
       uses: actions/checkout@v4
