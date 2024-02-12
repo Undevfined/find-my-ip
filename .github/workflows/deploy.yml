@@ -11,21 +11,32 @@ jobs:
     runs-on: self-hosted
     name: Deploy IP Finder
     steps:
+    - name: Setup variables
+      id: vars
+      run: |
+        echo "DEPLOY_DIR=$HOME/pre-deploy" >> $GITHUB_ENV
+        echo "BINARY_PATH=$HOME/ip-finder" >> $GITHUB_ENV
+
     - name: Create or clean pre-deploy directory
       run: |
-        mkdir -p /tmp/pre-deploy
-        rm -rf /tmp/pre-deploy/*
-        
+        mkdir -p $DEPLOY_DIR
+        rm -rf $DEPLOY_DIR/*
+
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        path: /pre-deploy
-        
+        path: ${{ env.DEPLOY_DIR }}
+
     - name: Build project
       run: |
-        cd /pre-deploy
-        go build -o /usr/local/bin/ip-finder
-        
+        cd $DEPLOY_DIR
+        go build -o $BINARY_PATH
+
+    - name: Stop existing ip-finder process
+      run: |
+        pkill ip-finder || true
+        rm -f $BINARY_PATH
+
     - name: Execute ip-finder in background
       run: |
-        nohup /usr/local/bin/ip-finder &
+        nohup $BINARY_PATH &
